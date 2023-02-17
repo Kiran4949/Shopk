@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="/static/images/favicon/Cart-icon.png" />
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <!--FontAwesome CSS-->
+    <link rel="stylesheet" href="{% static 'css/all.min.css' %}">
+    <!-- zoom Image -->
+    <script src="https://unpkg.com/js-image-zoom@0.7.0/js-image-zoom.js" type="application/javascript"></script>
+    <title> ShopK | {% block title %} {% endblock title %} </title>
+     <style> 
+      .button:hover{
+        background: transparent;
+        border: 0.5px solid #799be6;
+        box-shadow: 0 0 8px 0 #799be6 inset,
+                    0 0 8px 4px #799be6;
+        border-radius: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
+     <div class="container">
+       <b><a class="navbar-brand fs-5" href="/">ShopK</a></b>
+       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+         <span class="navbar-toggler-icon"></span>
+       </button>
+       <div class="collapse navbar-collapse" id="navbarSupportedContent">
+         <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+           <li class="nav-item ms-4">
+             <a class="nav-link active " aria-current="page" href="/"> Home </a>
+           </li>
+           <li class="nav-item ms-3">
+            <a class="nav-link active " aria-current="page" href=" {% url 'top_offers' %} "> Top Offers </a>
+          </li>
+          <li class="nav-item dropdown ms-3">
+            <a class="nav-link dropdown-toggle text-white " href="#" id="fashionDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              Fashion
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="fashionDropdown">
+              <li><a class="dropdown-item" href="{% url 'topwear' %}">Men's Top Wear</a></li>
+              <li><a class="dropdown-item" href=" {% url 'bottomwear' %} ">Men's Bottom Wear</a></li>
+            </ul>
+          </li>
+           <li class="nav-item dropdown ms-3">
+             <a class="nav-link dropdown-toggle text-white " href="#" id="electronicsDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+               Electronics
+             </a>
+             <ul class="dropdown-menu" aria-labelledby="electronicsDropdown">
+               <li><a class="dropdown-item" href="{% url 'mobile' %}">Mobile</a></li>
+               <li><a class="dropdown-item" href="{% url 'laptop' %}">Laptop</a></li>
+             </ul>
+           </li>
+         </ul>
+         <form class="d-flex" action="/search">
+          <input class="form-control me-2" type="search" name="search" placeholder="Search here" aria-label="Search" style="width: 330px;">
+          <button class="btn btn-info" type="submit">Search</button>
+         </form>
+         <div>
+          <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            {% if request.user.is_authenticated %} 
+           <li class="nav-item dropdown mx-2">
+              <a class="nav-link dropdown-toggle text-white" href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false"> {{request.user.username | capfirst}} </a> 
+              <ul class="dropdown-menu" aria-labelledby="profileDropdown">
+                <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                <li><a class="dropdown-item" href="{% url 'orders' %}">Orders</a></li>
+                <li><a class="dropdown-item" href="{% url 'changepassword' %}">Change Password</a></li>
+                <li><a class="dropdown-item" href=" {% url 'logout' %} ">Logout</a></li>
+              </ul>
+            </li>
+            <li class="nav-item mx-2">
+             <a href="{% url 'showcart' %}" class="nav-link text-white"><span class="badge bg-danger"> {{totalitem}} </span> Cart </a>
+            </li>
+            {% else %}
+            <li class="nav-item mx-2">
+             <a href=" {% url 'login' %} " class="nav-link text-white one ms-3">Login</a>
+            </li>
+            <li class="nav-item mx-2">
+             <a href=" {% url 'signup' %} " class="nav-link text-white btn btn-info button">Sign Up</a>
+            </li>
+            {% endif %}
+          </ul>
+         </div>
+       </div>
+     </div>
+    </nav>  
+    <br>
+    <br>
+
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show my-0" role="alert">
+    <strong> {{ message }} </strong>
+      <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"> </button>
+    </div>
+    {% endfor %}
+    {% endif %}
+
+    {% block banner_slider %} {% endblock banner_slider %}
+    {% block main-content %} {% endblock main-content %}
+    {% block payment-gateway %}{% endblock payment-gateway %} 
+
+    <!-- Start Footer -->
+    <footer class="container-fluid bg-dark navbar-fixed-bottom text-center p-3 mt-5">
+        <small class="text-white">Copyright &copy; 2022 || Designed By ShopK || </small> <br>
+        <img src="{% static 'images/payment.png' %}" alt="" srcset="" class="img-fluid" height="2px"> 
+        <br>
+        <small style="color: white; padding: 6px; font-size: 15px; text-align: center; font-weight: 300"><a href="#" style="color: white; text-decoration: none;"> About </a></small>
+        <small style="color: white; padding: 6px; font-size; 15px; text-align: center; justify-content; center; font-weight: 300;"><a href=" {% url 'contact' %} " style="color: white; text-decoration: none;" > Contact </a></small>        
+    </footer> 
+    <!-- End Footer -->
+
+    <!-- Jquery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
+
+    <script src="{% static 'js/owl.carousel.min.js' %}"></script>
+    <script src="{% static 'js/all.min.js' %}"></script>
+    <script src="{% static 'js/myscript.js' %}"></script>
+
+    <script>
+      $(document).ready( function() {                
+        $('.dropdown').hover( 
+          function() {                        
+            $(this).find('ul').css({
+              "display": "block",
+              "margin-top": 0
+            });                        
+          }, 
+          function() {                        
+            $(this).find('ul').css({
+              "display": "none",
+              "margin-top": 0
+            });                        
+          } 
+        );
+      });
+    </script>
+
+  </body>
+</html>
+
+
+
+
+
+
+
